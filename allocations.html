@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Delegate Allocations for BMUN'25: Find your council and country assignment for the Bhavans Model United Nations conference.">
+    <meta name="keywords" content="BMUN, Bhavans MUN, Delegate Allocations, Council Assignments, BMUN 2025">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" href="./images/BMUN'25 Logo.png" type="image/png">
+    <title>Delegate Allocations - BMUN'25</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="./images/BMUN'25 Logo.png">
+    
+    <!-- React and Babel for JSX transformation -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+        :root { 
+            --primary-dark: #0a192f;
+            --primary-blue: #1e3a8a;
+            --accent-blue: #3b82f6;
+            --light-blue: #93c5fd;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary-dark);
+            color: white;
+            scroll-behavior: smooth;
+        }
+        
+        .glass-card {
+            background: rgba(30, 58, 138, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #93c5fd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .glow-effect {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .glow-effect:hover {
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.8);
+        }
+        
+        .neon-border {
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .neon-border:focus {
+            border-color: rgba(59, 130, 246, 0.8);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            outline: none;
+        }
+        
+        /* Animation classes */
+        .animate-on-load {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .animate-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Special animations for hero section */
+        .hero-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .hero-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Delay classes */
+        .delay-1 { transition-delay: 0.2s; }
+        .delay-2 { transition-delay: 0.4s; }
+        .delay-3 { transition-delay: 0.6s; }
+        .delay-4 { transition-delay: 0.8s; }
+        .delay-5 { transition-delay: 1.0s; }
+        .delay-6 { transition-delay: 1.2s; }
+        .delay-7 { transition-delay: 1.4s; }
+        .delay-8 { transition-delay: 1.6s; }
+        .delay-9 { transition-delay: 1.8s; }
+        
+        .flip-card {
+            perspective: 1000px;
+        }
+        
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+        }
+        
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .scroll-down {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        
+        .committee-card {
+            transition: all 0.3s ease;
+        }
+        
+        .committee-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .nav-scrolled {
+            background: rgba(10, 25, 47, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        nav a {
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        nav a:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 0.5rem;
+            z-index: -1;
+            transform: scale(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        nav a:hover::before {
+            transform: scale(1);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Loader styles */
+        .loader-overlay {
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: #101e34;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s;
+            border: none;
+            outline: none;
+            box-shadow: none;
+            opacity: 1;
+            pointer-events: all;
+        }
+        .loader-overlay.loader-animate-in {
+            animation: loaderIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .loader-overlay.loader-animate-out {
+            animation: loaderOut 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes loaderIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        @keyframes loaderOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .loader-logo {
+            width: 130px;
+            height: 130px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            animation: logoGrow 2.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .loader-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            z-index: 2;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        .loader-svg-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 180px;
+            height: 180px;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        .loader-svg-spinner .spinner-arc {
+            stroke: #3b82f6;
+            stroke-width: 5;
+            stroke-linecap: round;
+            fill: none;
+            transform-origin: 50% 50%;
+            animation: loader-arc-spin 1.2s linear infinite;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        @keyframes loader-arc-spin {
+            100% { transform: rotate(360deg); }
+        }
+        /* Loader styles */
+        body.body-loading > *:not(#loader) {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            user-select: none !important;
+        }
+        body:not(.body-loading) > *:not(#loader) {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            user-select: auto !important;
+            transition: opacity 0.3s;
+        }
+        @keyframes logoGrow {
+            0% { 
+                transform: scale(0.1); 
+                opacity: 0; 
+            }
+            20% { 
+                opacity: 1; 
+            }
+            100% { 
+                transform: scale(1); 
+                opacity: 1; 
+            }
+        }
+        .arc-hidden {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        /* Loader styles */
+        body.body-loading > *:not(#loader) {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            user-select: none !important;
+        }
+        body:not(.body-loading) > *:not(#loader) {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            user-select: auto !important;
+            transition: opacity 0.3s;
+        }
+
+        .fly-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        body.fly-in-animate .fly-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Dynamic page element animations */
+        .page-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        .page-element.delay-1 { transition-delay: 0.2s; }
+        .page-element.delay-2 { transition-delay: 0.4s; }
+        .page-element.delay-3 { transition-delay: 0.6s; }
+        .page-element.delay-4 { transition-delay: 0.8s; }
+        .page-element.delay-5 { transition-delay: 1.0s; }
+        .page-element.delay-6 { transition-delay: 1.2s; }
+        .page-element.delay-7 { transition-delay: 1.4s; }
+        .page-element.delay-8 { transition-delay: 1.6s; }
+        .page-element.delay-9 { transition-delay: 1.8s; }
+        
+        body.page-loaded .page-element {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Registration card animations */
+        .registration-card {
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: scale(1);
+        }
+        
+        .registration-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+        }
+        
+        .registration-card .icon {
+            transition: all 0.3s ease;
+        }
+        
+        .registration-card:hover .icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+        
+        /* Pulse animation for CTA buttons */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.8); }
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        /* Floating animation for cards */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Mobile Navigation Styles */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        
+        .mobile-nav.active {
+            left: 0;
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .mobile-nav a {
+            display: block;
+            padding: 1rem 2rem;
+            margin: 0.5rem 0;
+            font-size: 1.25rem;
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 80%;
+            max-width: 300px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition-delay: 0.1s;
+        }
+        
+        .mobile-nav.active a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .mobile-nav a:nth-child(3) { transition-delay: 0.1s; }
+        .mobile-nav a:nth-child(4) { transition-delay: 0.2s; }
+        .mobile-nav a:nth-child(5) { transition-delay: 0.3s; }
+        .mobile-nav a:nth-child(6) { transition-delay: 0.4s; }
+        .mobile-nav a:nth-child(7) { transition-delay: 0.5s; }
+        .mobile-nav a:nth-child(8) { transition-delay: 0.6s; }
+        
+        .mobile-nav a:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .mobile-nav .logo-container {
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .mobile-nav.active .logo-container {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .mobile-nav .close-btn {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            opacity: 0;
+            transform: rotate(90deg);
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-nav.active .close-btn {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+        
+        /* Ensure mobile nav is above everything */
+        #mobile-nav {
+            z-index: 9999 !important;
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Gradient text animation */
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .gradient-animate {
+            background-size: 200% 200%;
+            animation: gradient-shift 3s ease infinite;
+        }
+
+        /* Additional styles for React component */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating animation for text */
+        .hover-away-text {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0px, 0px) rotate(0deg);
+            }
+            25% {
+                transform: translate(8px, -8px) rotate(0.5deg);
+            }
+            50% {
+                transform: translate(-6px, -4px) rotate(-0.3deg);
+            }
+            75% {
+                transform: translate(-12px, -12px) rotate(0.2deg);
+            }
+        }
+    </style>
+</head>
+<body class="body-loading">
+    <div id="loader" class="loader-overlay">
+        <div class="loader-logo">
+            <svg class="loader-svg-spinner arc-hidden" viewBox="0 0 100 100">
+                <circle class="spinner-arc" cx="50" cy="50" r="42" />
+            </svg>
+            <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" />
+        </div>
+    </div>
+    
+    <!-- React App Container -->
+    <div id="root"></div>
+    
+    <!-- Load delegate data -->
+    <script src="./delegate-data.js"></script>
+    
+    <script type="text/babel">
+        const DelegateAllocations = () => {
+            const [searchTerm, setSearchTerm] = React.useState('');
+            const [delegateData, setDelegateData] = React.useState([]);
+            const [filteredDelegates, setFilteredDelegates] = React.useState([]);
+            const [isLoading, setIsLoading] = React.useState(true);
+            const [isVisible, setIsVisible] = React.useState(false);
+            const [dataLoaded, setDataLoaded] = React.useState(false);
+
+            // Load delegate data from JavaScript file
+            React.useEffect(() => {
+                const loadDelegateData = () => {
+                    try {
+                        console.log('Loading delegate data from JavaScript file...');
+                        
+                        // Access the global delegateData variable
+                        const importedData = window.delegateData;
+                        
+                        if (!importedData || !Array.isArray(importedData)) {
+                            throw new Error('delegateData not found or not an array');
+                        }
+                        
+                        console.log('Successfully loaded delegate data from JS file:', importedData);
+                        
+                        setDelegateData(importedData);
+                        setFilteredDelegates(importedData);
+                        setDataLoaded(true);
+                    } catch (error) {
+                        console.error('Error loading delegate data from JS file:', error);
+                        
+                        // Set empty data and show error
+                        setDelegateData([]);
+                        setFilteredDelegates([]);
+                        setDataLoaded(true);
+                    }
+                };
+                
+                // Small delay to ensure the script has loaded
+                setTimeout(loadDelegateData, 100);
+            }, []);
+
+            // Filter delegates based on search term with debouncing
+            React.useEffect(() => {
+                if (!dataLoaded) return;
+                
+                const timeoutId = setTimeout(() => {
+                    if (searchTerm.trim() === '') {
+                        setFilteredDelegates(delegateData);
+                    } else {
+                        const filtered = delegateData.filter(delegate =>
+                            (delegate.name && delegate.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                            (delegate.council && delegate.council.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                            (delegate.country && delegate.country.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                            (delegate.school && delegate.school.toLowerCase().includes(searchTerm.toLowerCase()))
+                        );
+                        setFilteredDelegates(filtered);
+                    }
+                }, 150); // 150ms debounce for smoother typing experience
+                
+                return () => clearTimeout(timeoutId);
+            }, [searchTerm, delegateData, dataLoaded]);
+
+            // Loading and animation effects
+            React.useEffect(() => {
+                const timer = setTimeout(() => {
+                    setIsLoading(false);
+                    setTimeout(() => setIsVisible(true), 100);
+                }, 1500);
+
+                return () => clearTimeout(timer);
+            }, []);
+
+            const handleSearchChange = (e) => {
+                setSearchTerm(e.target.value);
+            };
+
+            const scrollToTop = () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            };
+
+            const toggleMobileNav = () => {
+                const mobileNav = document.getElementById('mobile-nav');
+                if (mobileNav) {
+                    mobileNav.classList.toggle('active');
+                }
+            };
+
+            if (isLoading) {
+                return (
+                    <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+                        <div className="loader-overlay">
+                            <div className="loader-logo">
+                                <svg className="loader-svg-spinner" viewBox="0 0 100 100">
+                                    <circle className="spinner-arc" cx="50" cy="50" r="42" />
+                                </svg>
+                                <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" />
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen bg-slate-900 text-white font-['Poppins']">
+                    {/* Navigation */}
+                    <nav id="navbar" className="fixed w-full z-50 transition-all duration-300 py-4 page-element delay-1 bg-primary-dark/90 backdrop-blur-md border-b border-blue-600/20">
+                        <div className="container mx-auto px-6 flex justify-between items-center">
+                            {/* Brand/Logo (visible on mobile) */}
+                            <div className="flex items-center md:hidden">
+                                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center glow-effect overflow-hidden">
+                                    <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" className="w-full h-full object-contain p-1" />
+                                </div>
+                                <span className="text-white font-bold text-lg ml-2">BMUN'25</span>
+                            </div>
+                            
+                            {/* Desktop Navigation */}
+                            <div className="hidden md:flex space-x-4 items-center justify-center flex-1">
+                                <a href="/" className="text-blue-200">Home</a>
+                                <a href="./information" className="text-blue-200">Information</a>
+                                <a href="./councils" className="text-blue-200">Councils</a>
+                                <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center glow-effect overflow-hidden mx-2">
+                                    <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" className="w-full h-full object-contain p-1" />
+                                </div>
+                                <a href="./register" className="text-blue-200">Register</a>
+                                <a href="#" onClick={scrollToTop} className="text-white bg-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-all transform hover:scale-105 glow-effect">Allocations</a>
+                                <a href="./gallery" className="text-blue-200">Gallery</a>
+                            </div>
+                            
+                            {/* Mobile Navigation Toggle */}
+                            <div className="md:hidden flex items-center">
+                                <button id="mobile-menu-btn" className="text-white focus:outline-none">
+                                    <i className="fas fa-bars text-2xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </nav>
+
+                    {/* Mobile Navigation Menu */}
+                    <div id="mobile-nav" className="mobile-nav">
+                        <button className="close-btn" onClick={toggleMobileNav}>
+                            <i className="fas fa-times"></i>
+                        </button>
+                        <div className="logo-container">
+                            <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center glow-effect overflow-hidden">
+                                <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" className="w-full h-full object-contain p-1" />
+                            </div>
+                        </div>
+                        <a href="/" onClick={toggleMobileNav}>Home</a>
+                        <a href="./information" onClick={toggleMobileNav}>Information</a>
+                        <a href="./councils" onClick={toggleMobileNav}>Councils</a>
+                        <a href="./register" onClick={toggleMobileNav}>Register</a>
+                        <a href="#" onClick={() => { scrollToTop(); toggleMobileNav(); }}>Allocations</a>
+                        <a href="./gallery" onClick={toggleMobileNav}>Gallery</a>
+                    </div>
+
+                    {/* Hero Section */}
+                    <section className="min-h-[40vh] flex items-center justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-blue-900/70 z-0"></div>
+                        <div className="absolute inset-0 bg-[url('./images/gallerybg.png')] bg-cover bg-center opacity-20 z-0"></div>
+                        <div className="container mx-auto px-6 z-10 text-center" style={{position: 'relative', zIndex: 1}}>
+                            <h1 className={`text-6xl md:text-8xl font-extrabold mb-4 text-white mt-16 hover-away-text transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{fontFamily: 'Inter, sans-serif'}}>
+                                Allocations
+                            </h1>
+                        </div>
+                    </section>
+
+                    {/* Main Content */}
+                    <section className="min-h-screen flex items-start justify-center relative overflow-hidden pt-8 pb-16">
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 to-blue-900/70 z-0"></div>
+                        
+                        {/* Background Logo */}
+                        <div className="absolute inset-0 flex items-center justify-center z-0 opacity-10">
+                            <img src="./images/BMUN'25 Logo.png" alt="BMUN Background Logo" className="w-96 h-96 md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] object-contain" />
+                        </div>
+
+                        <div className="container mx-auto px-6 relative z-10">
+                            {/* Search Bar */}
+                            <div className={`sticky top-6 max-w-2xl mx-auto mb-8 transition-opacity duration-700 delay-200 ${isVisible ? 'opacity-100' : 'opacity-0'} z-20`}>
+                                <div className="relative">
+                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                                        <i className="fas fa-search text-blue-400 text-lg"></i>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        placeholder="Search by name, council, or country..."
+                                        value={searchTerm}
+                                        onChange={handleSearchChange}
+                                        className="w-full pl-12 pr-4 py-4 bg-slate-800/50 backdrop-blur-sm border border-blue-600/30 rounded-xl text-white placeholder-blue-300 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 relative z-0"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Delegates List */}
+                            <div className={`max-w-6xl mx-auto transition-opacity duration-700 delay-300 ${isVisible ? 'opacity-100' : 'opacity-0'} pr-1 mt-6 md:mt-8`}> 
+                                {!dataLoaded ? (
+                                    <div className="text-center py-12">
+                                        <div className="glass-card rounded-2xl p-8">
+                                            <i className="fas fa-spinner fa-spin text-6xl text-blue-400 mb-4"></i>
+                                            <h3 className="text-2xl font-bold text-white mb-2">Loading Delegates...</h3>
+                                            <p className="text-blue-300">Please wait while we load the delegate information</p>
+                                        </div>
+                                    </div>
+                                ) : delegateData.length === 0 ? (
+                                    <div className="text-center py-12">
+                                        <div className="glass-card rounded-2xl p-8">
+                                            <i className="fas fa-exclamation-triangle text-6xl text-yellow-400 mb-4"></i>
+                                            <h3 className="text-2xl font-bold text-white mb-2">Unable to Load Data</h3>
+                                            <p className="text-blue-300 mb-4">Please ensure delegate-data.js is in the same folder as allocations.html</p>
+                                            <div className="text-left text-blue-200 text-sm space-y-2">
+                                                <p><strong>Check:</strong> delegate-data.js file exists</p>
+                                                <p><strong>Check:</strong> Both files are in the same directory</p>
+                                                <p><strong>Note:</strong> This should work without a server</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : filteredDelegates.length === 0 ? (
+                                    <div className="text-center py-12">
+                                        <div className="glass-card rounded-2xl p-8">
+                                            <i className="fas fa-search text-6xl text-blue-400 mb-4"></i>
+                                            <h3 className="text-2xl font-bold text-white mb-2">No Results Found</h3>
+                                            <p className="text-blue-300">If your name is missing, please e-mail contact@bmunbh.com</p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-8">
+                                        {Object.entries(
+                                            filteredDelegates.reduce((acc, delegate) => {
+                                                if (!acc[delegate.council]) {
+                                                    acc[delegate.council] = [];
+                                                }
+                                                acc[delegate.council].push(delegate);
+                                                return acc;
+                                            }, {})
+                                        ).map(([council, delegates], councilIndex) => (
+                                            <div
+                                                key={council}
+                                                className="glass-card rounded-2xl p-8"
+                                                style={{
+                                                    animationDelay: `${councilIndex * 0.2}s`,
+                                                    animation: isVisible ? 'fadeInUp 0.6s ease-out forwards' : 'none'
+                                                }}
+                                            >
+                                                {/* Council Header */}
+                                                <div className="flex items-center mb-6 pb-4 border-b border-blue-600/30">
+                                                    <div className="w-12 h-12 mr-4 flex items-center justify-center">
+                                                        <img 
+                                                            src={`./images/${council.toLowerCase()}.png`} 
+                                                            alt={`${council} Logo`}
+                                                            className="w-full h-full object-contain"
+                                                            onError={(e) => {
+                                                                e.target.style.display = 'none';
+                                                                e.target.nextSibling.style.display = 'flex';
+                                                            }}
+                                                        />
+                                                        <div className="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center hidden">
+                                                            <i className="fas fa-gavel text-white text-xl"></i>
+                                                        </div>
+                                                    </div>
+                                                    <h2 className="text-3xl font-bold text-white">{council}:</h2>
+                                                </div>
+                                                
+                                                {/* Separator Line */}
+                                                
+                                                {/* Delegates Table */}
+                                                <div className="overflow-x-auto">
+                                                    <table className="w-full">
+                                                        <thead>
+                                                            <tr className="border-b border-blue-600/30">
+                                                                <th className="text-left py-3 px-1 sm:px-2 md:px-4 text-blue-300 font-semibold text-sm sm:text-base md:text-lg">NAME</th>
+                                                                <th className="text-left py-3 px-1 sm:px-2 md:px-4 text-blue-300 font-semibold text-sm sm:text-base md:text-lg">ALLOCATION</th>
+                                                                <th className="text-left py-3 px-1 sm:px-2 md:px-4 text-blue-300 font-semibold text-sm sm:text-base md:text-lg">SCHOOL</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {delegates.map((delegate, delegateIndex) => (
+                                                                <tr 
+                                                                    key={delegateIndex}
+                                                                    className="border-b border-blue-600/20 hover:bg-blue-900/20 transition-colors"
+                                                                    style={{
+                                                                        animationDelay: `${(councilIndex * 0.2) + (delegateIndex * 0.05)}s`,
+                                                                        animation: isVisible ? 'fadeInUp 0.4s ease-out forwards' : 'none'
+                                                                    }}
+                                                                >
+                                                                    <td className="py-3 px-1 sm:px-2 md:px-4 text-white font-medium text-sm sm:text-base md:text-lg">{delegate.name}</td>
+                                                                    <td className="py-3 px-1 sm:px-2 md:px-4 text-blue-200 text-sm sm:text-base md:text-lg">{delegate.country}</td>
+                                                                    <td className="py-3 px-1 sm:px-2 md:px-4 text-blue-200 text-sm sm:text-base md:text-lg">{delegate.school}</td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                
+                                                {/* Bottom Separator */}
+                                                <div className="border-t border-blue-600/30 mt-6"></div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer className="py-8 mt-12">
+                        <div className="glass-card rounded-3xl p-8 mx-4">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                {/* Navigation Links */}
+                                <div className="text-center md:text-left">
+                                    <h3 className="text-xl font-semibold text-white mb-4">Navigation</h3>
+                                    <div className="flex flex-col space-y-2">
+                                        <a href="/" className="text-blue-300 hover:text-white transition-colors">Home</a>
+                                        <a href="./information" className="text-blue-300 hover:text-white transition-colors">Information</a>
+                                        <a href="./councils" className="text-blue-300 hover:text-white transition-colors">Councils</a>
+                                        <a href="./register" className="text-blue-300 hover:text-white transition-colors">Register</a>
+                                        <a href="#" onClick={scrollToTop} className="text-blue-300 hover:text-white transition-colors">Allocations</a>
+                                        <a href="./gallery" className="text-blue-300 hover:text-white transition-colors">Gallery</a>
+                                    </div>
+                                </div>
+                                
+                                {/* Location */}
+                                <div className="text-center md:text-left">
+                                    <h3 className="text-xl font-semibold text-white mb-4">Location</h3>
+                                    <div className="space-y-2">
+                                        <p className="text-blue-300">Bahrain Indian School</p>
+                                        <p className="text-blue-300">Building Number 109, Road 7307</p>
+                                        <p className="text-blue-300">Block 473, Abu Saiba</p>
+                                        <p className="text-blue-300">Kingdom of Bahrain</p>
+                                    </div>
+                                </div>
+                                    
+                                {/* Contact & Social */}
+                                <div className="text-center md:text-left">
+                                    <h3 className="text-xl font-semibold text-white mb-4">Contact Us</h3>
+                                    <div className="space-y-3">
+                                        <div className="flex items-center justify-center md:justify-start">
+                                            <i className="fas fa-envelope text-blue-400 mr-2"></i>
+                                            <a href="mailto:contact@bmunbh.com" className="text-blue-300 hover:text-white transition-colors">contact@bmunbh.com</a>
+                                        </div>
+                                        <div className="flex items-center justify-center md:justify-start">
+                                            <i className="fab fa-instagram text-blue-400 mr-2"></i>
+                                            <a href="https://www.instagram.com/bmun.bis" className="text-blue-300 hover:text-white transition-colors">@bmun.bis</a>
+                                        </div>
+                                        <div className="flex items-center justify-center md:justify-start">
+                                            <i className="fab fa-tiktok text-blue-400 mr-2"></i>
+                                            <a href="https://www.tiktok.com/@bmunbis" className="text-blue-300 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">@bmunbis</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            {/* Bottom section with logo and copyright */}
+                            <div className="border-t border-blue-800 mt-8 pt-6 text-center">
+                                <div className="flex flex-col items-center">
+                                    <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center mb-2">
+                                        <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" className="w-8 h-8 object-contain" />
+                                    </div>
+                                    <span className="text-white font-bold text-xl">BMUN'25</span>
+                                    <p className="text-blue-300 text-sm mt-2">Bhavans Model United Nations</p>
+                                    <p className="text-blue-400 text-xs mt-2">© 2025 BMUN. All rights reserved.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        // Render the React component
+        ReactDOM.render(<DelegateAllocations />, document.getElementById('root'));
+    </script>
+
+    <script>
+        // Smooth scroll to top function
+        function scrollToTop() {
+            const currentPosition = window.pageYOffset || document.documentElement.scrollTop;
+            const targetPosition = 0;
+            const distance = targetPosition - currentPosition;
+            const duration = 1000; // 1 second
+            let start = null;
+            
+            function animation(currentTime) {
+                if (start === null) start = currentTime;
+                const timeElapsed = currentTime - start;
+                const run = easeInOutCubic(timeElapsed, currentPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
+            }
+            
+            function easeInOutCubic(t, b, c, d) {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t * t + b;
+                t -= 2;
+                return c / 2 * (t * t * t + 2) + b;
+            }
+            
+            requestAnimationFrame(animation);
+        }
+
+        // Animate the SVG arc for the loader
+        function animateLoaderArc() {
+            const arc = document.querySelector('.spinner-arc');
+            if (!arc) return;
+            const fullLen = 2 * Math.PI * 42; // circumference (r=42)
+            const minLen = 0.12 * fullLen; // collapsed line
+            const maxLen = 0.92 * fullLen; // almost full circle (small gap)
+            let start = null;
+            let duration = 1200;
+            let phase = 0; // 0: expand, 1: collapse (start with expand)
+            // Set initial state to collapsed
+            arc.setAttribute('stroke-dasharray', minLen + ',' + fullLen);
+            arc.setAttribute('stroke-dashoffset', -0.25 * fullLen);
+            function step(ts) {
+                if (!start) start = ts;
+                let progress = (ts - start) / duration;
+                if (progress > 1) progress = 1;
+                let len;
+                if (phase === 0) {
+                    // expand
+                    len = minLen + (maxLen - minLen) * progress;
+                } else {
+                    // collapse
+                    len = maxLen - (maxLen - minLen) * progress;
+                }
+                arc.setAttribute('stroke-dasharray', len + ',' + fullLen);
+                arc.setAttribute('stroke-dashoffset', -0.25 * fullLen); // gap at top
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    phase = 1 - phase;
+                    start = null;
+                    requestAnimationFrame(step);
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        // Mobile Navigation Function
+        function toggleMobileNav() {
+            const mobileNav = document.getElementById('mobile-nav');
+            if (mobileNav) {
+                mobileNav.classList.toggle('active');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu button event listener
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', toggleMobileNav);
+            }
+
+            // Loader entrance animation
+            var loader = document.getElementById('loader');
+            var arcSvg = loader.querySelector('.loader-svg-spinner');
+            loader.classList.add('loader-animate-in');
+            
+            // Start arc animation after a delay
+            setTimeout(function() {
+                arcSvg.classList.remove('arc-hidden'); // Show arc
+                animateLoaderArc(); // Start arc animation
+            }, 1000);
+            
+            // Loader fade out with exit animation
+            setTimeout(function() {
+                loader.classList.add('loader-animate-out');
+                setTimeout(function() {
+                    loader.classList.add('hidden');
+                    document.body.classList.remove('body-loading');
+                    setTimeout(function() {
+                        document.body.classList.add('page-loaded');
+                    }, 300); // Delay before page animations
+                }, 600);
+            }, 2500);
+        });
+    </script>
+</body>
+</html>

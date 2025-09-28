@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMUN'25 | 404 - Page Not Found</title>
+    <link rel="icon" type="image/png" href="./images/BMUN'25 Logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+    <style>
+        /* Loader styles */
+        .loader-overlay {
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: #101e34;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s;
+            border: none;
+            outline: none;
+            box-shadow: none;
+            opacity: 1;
+            pointer-events: all;
+        }
+        .loader-overlay.loader-animate-in {
+            animation: loaderIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .loader-overlay.loader-animate-out {
+            animation: loaderOut 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes loaderIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        @keyframes loaderOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .loader-logo {
+            width: 130px;
+            height: 130px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        .loader-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            z-index: 2;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        .loader-svg-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 180px;
+            height: 180px;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        .loader-svg-spinner .spinner-arc {
+            stroke: #3b82f6;
+            stroke-width: 5;
+            stroke-linecap: round;
+            fill: none;
+            transform-origin: 50% 50%;
+            animation: loader-arc-spin 1.2s linear infinite;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        @keyframes loader-arc-spin {
+            100% { transform: rotate(360deg); }
+        }
+        
+        body.body-loading > *:not(#loader) {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            user-select: none !important;
+        }
+        body:not(.body-loading) > *:not(#loader) {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            user-select: auto !important;
+            transition: opacity 0.3s;
+        }
+
+        .loader-logo.logo-grow {
+            animation: logoGrow 2.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes logoGrow {
+            0% { 
+                transform: scale(0.1); 
+                opacity: 0; 
+            }
+            20% { 
+                opacity: 1; 
+            }
+            100% { 
+                transform: scale(1); 
+                opacity: 1; 
+            }
+        }
+        .arc-hidden {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        /* 404 Specific Animations */
+        .error-number {
+            animation: errorPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes errorPulse {
+            0%, 100% { 
+                transform: scale(1);
+                text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+            }
+            50% { 
+                transform: scale(1.05);
+                text-shadow: 0 0 30px rgba(59, 130, 246, 0.8);
+            }
+        }
+        
+        .floating-astronaut {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0px, 0px) rotate(0deg);
+            }
+            25% {
+                transform: translate(8px, -8px) rotate(0.5deg);
+            }
+            50% {
+                transform: translate(-6px, -4px) rotate(-0.3deg);
+            }
+            75% {
+                transform: translate(-12px, -12px) rotate(0.2deg);
+            }
+        }
+        
+        .glitch-text {
+            position: relative;
+            animation: glitch 3s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 90%, 100% {
+                transform: translate(0);
+            }
+            10% {
+                transform: translate(-2px, 2px);
+            }
+            20% {
+                transform: translate(2px, -2px);
+            }
+            30% {
+                transform: translate(-2px, -2px);
+            }
+            40% {
+                transform: translate(2px, 2px);
+            }
+        }
+        
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch-text::before {
+            animation: glitch-1 2s infinite;
+            color: #ff0000;
+            z-index: -1;
+        }
+        
+        .glitch-text::after {
+            animation: glitch-2 2s infinite;
+            color: #00ff00;
+            z-index: -2;
+        }
+        
+        @keyframes glitch-1 {
+            0%, 90%, 100% {
+                transform: translate(0);
+            }
+            10% {
+                transform: translate(-1px, 1px);
+            }
+            20% {
+                transform: translate(1px, -1px);
+            }
+            30% {
+                transform: translate(-1px, -1px);
+            }
+            40% {
+                transform: translate(1px, 1px);
+            }
+        }
+        
+        @keyframes glitch-2 {
+            0%, 90%, 100% {
+                transform: translate(0);
+            }
+            10% {
+                transform: translate(1px, -1px);
+            }
+            20% {
+                transform: translate(-1px, 1px);
+            }
+            30% {
+                transform: translate(1px, 1px);
+            }
+            40% {
+                transform: translate(-1px, -1px);
+            }
+        }
+        
+        /* Interactive elements */
+        .interactive-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .interactive-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(59, 130, 246, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes particleFloat {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+        
+        /* Page load animations */
+        .page-element {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        body.page-loaded .page-element {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Mobile Navigation Styles */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        
+        .mobile-nav.active {
+            left: 0;
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .mobile-nav a {
+            display: block;
+            padding: 1rem 2rem;
+            margin: 0.5rem 0;
+            font-size: 1.25rem;
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 80%;
+            max-width: 300px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition-delay: 0.1s;
+        }
+        
+        .mobile-nav.active a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .mobile-nav a:nth-child(3) { transition-delay: 0.1s; }
+        .mobile-nav a:nth-child(4) { transition-delay: 0.2s; }
+        .mobile-nav a:nth-child(5) { transition-delay: 0.3s; }
+        .mobile-nav a:nth-child(6) { transition-delay: 0.4s; }
+        .mobile-nav a:nth-child(7) { transition-delay: 0.5s; }
+        .mobile-nav a:nth-child(8) { transition-delay: 0.6s; }
+        
+        .mobile-nav a:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .mobile-nav .logo-container {
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .mobile-nav.active .logo-container {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .mobile-nav .close-btn {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            opacity: 0;
+            transform: rotate(90deg);
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-nav.active .close-btn {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+        
+        /* Ensure mobile nav is above everything */
+        #mobile-nav {
+            z-index: 9999 !important;
+        }
+
+        nav a {
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        nav a:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 0.5rem;
+            z-index: -1;
+            transform: scale(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        nav a:hover::before {
+            transform: scale(1);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+    </style>
+</head>
+<body class="body-loading">
+    <div id="loader" class="loader-overlay">
+        <div class="loader-logo">
+            <svg class="loader-svg-spinner arc-hidden" viewBox="0 0 100 100">
+                <circle class="spinner-arc" cx="50" cy="50" r="42" />
+            </svg>
+            <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" />
+        </div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 page-element delay-1 bg-primary-dark/90 backdrop-blur-md border-b border-blue-600/20">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <!-- Brand/Logo (visible on mobile) -->
+            <div class="flex items-center md:hidden">
+                <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center glow-effect overflow-hidden">
+                    <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" class="w-full h-full object-contain p-1">
+                </div>
+                <span class="text-white font-bold text-lg ml-2">BMUN'25</span>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex space-x-4 items-center justify-center flex-1">
+                <a href="/" class="text-blue-200">Home</a>
+                <a href="./information" class="text-blue-200">Information</a>
+                <a href="./councils" class="text-blue-200">Councils</a>
+                <div class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center glow-effect overflow-hidden mx-2">
+                    <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" class="w-full h-full object-contain p-1">
+                </div>
+                <a href="./register" class="text-blue-200">Register</a>
+                <a href="./contact" class="text-blue-200">Contact</a>
+                <a href="./gallery" class="text-blue-200">Gallery</a>
+            </div>
+            
+            <!-- Mobile Navigation Toggle -->
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-btn" class="text-white focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Menu -->
+    <div id="mobile-nav" class="mobile-nav">
+        <button class="close-btn" onclick="toggleMobileNav()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="logo-container">
+            <div class="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center glow-effect overflow-hidden">
+                <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" class="w-full h-full object-contain p-1">
+            </div>
+        </div>
+        <a href="/" onclick="toggleMobileNav();">Home</a>
+        <a href="./information" onclick="toggleMobileNav();">Information</a>
+        <a href="./councils" onclick="toggleMobileNav();">Councils</a>
+        <a href="./register" onclick="toggleMobileNav();">Register</a>
+        <a href="./contact" onclick="toggleMobileNav();">Contact</a>
+        <a href="./gallery" onclick="toggleMobileNav();">Gallery</a>
+    </div>
+
+    <!-- Error Message Section -->
+    <section class="py-12 relative min-h-screen flex items-center justify-center">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-900/70 to-blue-900/90 z-0"></div>
+        <div class="absolute inset-0 bg-[url('./images/background.png')] bg-cover bg-center opacity-20 z-0"></div>
+        
+        <!-- Floating Particles -->
+        <div id="particles-container" class="absolute inset-0 z-1"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-12 page-element delay-2">
+                <h1 class="text-6xl md:text-8xl font-extrabold mb-4 text-blue-400 mt-16">404</h1>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Oops! Page Not Found</h2>
+                <p class="text-xl text-blue-200 mb-6 max-w-2xl mx-auto">
+                    Looks like this page has floated off into space! Don't worry, we'll help you navigate back to safety.
+                </p>
+            </div>
+            
+            <!-- Interactive Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+                <div class="interactive-card glass-card rounded-2xl p-6 text-center page-element delay-3">
+                    <i class="fas fa-home text-4xl text-blue-400 mb-4"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">Go Home</h3>
+                    <p class="text-blue-200 mb-4">Return to the main page</p>
+                    <a href="/" class="download-btn text-white px-4 py-2 rounded-lg font-semibold inline-flex items-center w-full justify-center">
+                        <i class="fas fa-rocket mr-2"></i>
+                        Return to Homepage
+                    </a>
+                </div>
+                
+                <div class="interactive-card glass-card rounded-2xl p-6 text-center page-element delay-4">
+                    <i class="fas fa-envelope text-4xl text-blue-400 mb-4"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">Contact</h3>
+                    <p class="text-blue-200 mb-4">Get in touch with us</p>
+                    <a href="./contact" class="download-btn text-white px-4 py-2 rounded-lg font-semibold inline-flex items-center w-full justify-center">
+                        <i class="fas fa-paper-plane mr-2"></i>
+                        Send Message
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 mt-12 page-element delay-7">
+        <div class="glass-card rounded-3xl p-8 mx-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Navigation Links -->
+                <div class="text-center md:text-left">
+                    <h3 class="text-xl font-semibold text-white mb-4">Navigation</h3>
+                    <div class="flex flex-col space-y-2">
+                        <a href="/" class="text-blue-300 hover:text-white transition-colors">Home</a>
+                        <a href="./information" class="text-blue-300 hover:text-white transition-colors">Information</a>
+                        <a href="./councils" class="text-blue-300 hover:text-white transition-colors">Councils</a>
+                        <a href="./register" class="text-blue-300 hover:text-white transition-colors">Register</a>
+                        <a href="./contact" class="text-blue-300 hover:text-white transition-colors">Contact</a>
+                        <a href="./gallery" class="text-blue-300 hover:text-white transition-colors">Gallery</a>
+                    </div>
+                </div>
+                
+                <!-- Location -->
+                <div class="text-center md:text-left">
+                    <h3 class="text-xl font-semibold text-white mb-4">Location</h3>
+                    <div class="space-y-2">
+                        <p class="text-blue-300">Bahrain Indian School</p>
+                        <p class="text-blue-300">Building Number 109, Road 7307</p>
+                        <p class="text-blue-300">Block 473, Abu Saiba</p>
+                        <p class="text-blue-300">Kingdom of Bahrain</p>
+                    </div>
+                </div>
+                
+                <!-- Contact & Social -->
+                <div class="text-center md:text-left">
+                    <h3 class="text-xl font-semibold text-white mb-4">Contact Us</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-center md:justify-start">
+                            <i class="fas fa-envelope text-blue-400 mr-2"></i>
+                            <a href="mailto:contact@bmunbh.com" class="text-blue-300 hover:text-white transition-colors">contact@bmunbh.com</a>
+                        </div>
+                        <div class="flex items-center justify-center md:justify-start">
+                            <i class="fab fa-instagram text-blue-400 mr-2"></i>
+                            <a href="https://www.instagram.com/bmun.bis" class="text-blue-300 hover:text-white transition-colors">@bmun.bis</a>
+                        </div>
+                        <div class="flex items-center justify-center md:justify-start">
+                            <i class="fab fa-tiktok text-blue-400 mr-2"></i>
+                            <a href="https://www.tiktok.com/@bmunbis" class="text-blue-300 hover:text-white transition-colors" target="_blank">@bmunbis</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom section with logo and copyright -->
+            <div class="border-t border-blue-800 mt-8 pt-6 text-center">
+                <div class="flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center mb-2">
+                        <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" class="w-8 h-8 object-contain">
+                    </div>
+                    <span class="text-white font-bold text-xl">BMUN'25</span>
+                    <p class="text-blue-300 text-sm mt-2">Powered by Krissh Nambiar</p>
+                    <p class="text-blue-400 text-xs mt-2">© 2025 BMUN. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Particle system
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.width = Math.random() * 4 + 2 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 3 + 's';
+            particle.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            
+            document.getElementById('particles-container').appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 5000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 300);
+
+        // Loader animation functions
+        function animateLoaderArc() {
+            const arc = document.querySelector('.spinner-arc');
+            const fullLen = 2 * Math.PI * 42;
+            const minLen = 0.1 * fullLen;
+            const maxLen = 0.8 * fullLen;
+            let phase = 0;
+            let start = null;
+            const duration = 2000;
+
+            // Set initial state to collapsed
+            arc.setAttribute('stroke-dasharray', minLen + ',' + fullLen);
+            arc.setAttribute('stroke-dashoffset', -0.25 * fullLen);
+            
+            function step(ts) {
+                if (!start) start = ts;
+                let progress = (ts - start) / duration;
+                if (progress > 1) progress = 1;
+                let len;
+                if (phase === 0) {
+                    // expand
+                    len = minLen + (maxLen - minLen) * progress;
+                } else {
+                    // collapse
+                    len = maxLen - (maxLen - minLen) * progress;
+                }
+                arc.setAttribute('stroke-dasharray', len + ',' + fullLen);
+                arc.setAttribute('stroke-dashoffset', -0.25 * fullLen); // gap at top
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    phase = 1 - phase;
+                    start = null;
+                    requestAnimationFrame(step);
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        // Mobile Navigation Function
+        function toggleMobileNav() {
+            const mobileNav = document.getElementById('mobile-nav');
+            if (mobileNav) {
+                mobileNav.classList.toggle('active');
+            }
+        }
+
+        // Interactive card hover effects
+        function addCardInteractions() {
+            const cards = document.querySelectorAll('.interactive-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        }
+
+        // Glitch effect for 404 text
+        function addGlitchEffect() {
+            const glitchText = document.querySelector('.glitch-text');
+            if (glitchText) {
+                setInterval(() => {
+                    glitchText.style.animation = 'none';
+                    setTimeout(() => {
+                        glitchText.style.animation = 'glitch 0.3s ease-in-out';
+                    }, 10);
+                }, 3000);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu button event listener
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', toggleMobileNav);
+            }
+
+            // Loader entrance animation
+            var loader = document.getElementById('loader');
+            var logo = loader.querySelector('.loader-logo');
+            var arcSvg = loader.querySelector('.loader-svg-spinner');
+            loader.classList.add('loader-animate-in');
+            logo.classList.add('logo-grow');
+            
+            // Start arc animation after a delay
+            setTimeout(function() {
+                arcSvg.classList.remove('arc-hidden'); // Show arc
+                animateLoaderArc(); // Start arc animation
+            }, 1000);
+            
+            // Loader fade out with exit animation
+            setTimeout(function() {
+                loader.classList.add('loader-animate-out');
+                setTimeout(function() {
+                    loader.classList.add('hidden');
+                    document.body.classList.remove('body-loading');
+                    // Trigger page animations
+                    setTimeout(function() {
+                        document.body.classList.add('page-loaded');
+                        addCardInteractions();
+                        addGlitchEffect();
+                    }, 300);
+                }, 600);
+            }, 2500);
+        });
+    </script>
+</body>
+</html> 

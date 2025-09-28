@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BMUN gallery: browse images and highlights from past events, delegates in action, and the grand closing ceremony.">
+    <title>BMUN'25 | Gallery</title>
+    <link rel="icon" type="image/png" href="./images/BMUN'25 Logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+    <style>
+        /* Loader styles */
+        .loader-overlay {
+            position: fixed;
+            z-index: 9999;
+            inset: 0;           
+            background: #101e34;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s;
+            border: none;
+            outline: none;
+            box-shadow: none;
+            opacity: 1;
+            pointer-events: all;
+        }
+        .loader-overlay.loader-animate-in {
+            animation: loaderIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .loader-overlay.loader-animate-out {
+            animation: loaderOut 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes loaderIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        @keyframes loaderOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .loader-logo {
+            width: 130px;
+            height: 130px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        .loader-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            z-index: 2;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        .loader-svg-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 180px;
+            height: 180px;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        .loader-svg-spinner .spinner-arc {
+            stroke: #3b82f6;
+            stroke-width: 5;
+            stroke-linecap: round;
+            fill: none;
+            transform-origin: 50% 50%;
+            animation: loader-arc-spin 1.2s linear infinite;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        @keyframes loader-arc-spin {
+            100% { transform: rotate(360deg); }
+        }
+        /* Loader styles */
+        body.body-loading > *:not(#loader) {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            user-select: none !important;
+        }
+        body:not(.body-loading) > *:not(#loader) {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            user-select: auto !important;
+            transition: opacity 0.3s;
+        }
+
+        .loader-logo.logo-grow {
+            animation: logoGrow 2.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes logoGrow {
+            0% { 
+                transform: scale(0.1); 
+                opacity: 0; 
+            }
+            20% { 
+                opacity: 1; 
+            }
+            100% { 
+                transform: scale(1); 
+                opacity: 1; 
+            }
+        }
+        .arc-hidden {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        /* Floating animation for text */
+        .hover-away-text {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        /* Page load animations */
+        .page-element {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        body.page-loaded .page-element {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Scroll animations */
+        .scroll-element {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        
+        .scroll-element.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Stagger delays */
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
+        .delay-6 { transition-delay: 0.6s; }
+        .delay-7 { transition-delay: 0.7s; }
+        .delay-8 { transition-delay: 0.8s; }
+        
+        /* Gallery specific styles */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(10, 25, 47, 0.9));
+            padding: 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+        
+        .press-drive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .press-drive-card {
+            background: rgba(30, 58, 138, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .press-drive-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.4);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+        
+        .press-drive-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #3b82f6;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0px, 0px) rotate(0deg);
+            }
+            25% {
+                transform: translate(8px, -8px) rotate(0.5deg);
+            }
+            50% {
+                transform: translate(-6px, -4px) rotate(-0.3deg);
+            }
+            75% {
+                transform: translate(-12px, -12px) rotate(0.2deg);
+            }
+        }
+        /* Mobile Responsive Improvements */
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .glass-card {
+                margin: 0.5rem;
+                padding: 1.5rem;
+            }
+            
+            .text-5xl {
+                font-size: 2.5rem;
+            }
+            
+            .text-7xl {
+                font-size: 3.5rem;
+            }
+            
+            .text-8xl {
+                font-size: 4rem;
+            }
+            
+            .w-40 {
+                width: 6rem;
+            }
+            
+            .h-40 {
+                height: 6rem;
+            }
+            
+            .space-x-2 {
+                gap: 0.25rem;
+            }
+            
+            .space-x-4 {
+                gap: 0.5rem;
+            }
+            
+            .text-3xl {
+                font-size: 1.5rem;
+            }
+            
+            .text-4xl {
+                font-size: 2rem;
+            }
+            
+            .py-20 {
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+            }
+            
+            .py-8 {
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+            
+            .mb-8 {
+                margin-bottom: 2rem;
+            }
+            
+            .mb-6 {
+                margin-bottom: 1.5rem;
+            }
+            
+            .gap-6 {
+                gap: 1.5rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .flex-col {
+                flex-direction: column;
+            }
+            
+            .text-center {
+                text-align: center;
+            }
+            
+            .justify-center {
+                justify-content: center;
+            }
+            
+            .items-center {
+                align-items: center;
+            }
+            
+            /* Gallery specific mobile styles */
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin-top: 1rem;
+            }
+            
+            .gallery-item img {
+                height: 200px;
+            }
+            
+            .press-drive-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin-top: 2rem;
+            }
+            
+            .press-drive-card {
+                padding: 1.5rem;
+            }
+            
+            .press-drive-icon {
+                font-size: 2rem;
+            }
+        }
+        /* Mobile Navigation Styles */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        
+        .mobile-nav.active {
+            left: 0;
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .mobile-nav a {
+            display: block;
+            padding: 1rem 2rem;
+            margin: 0.5rem 0;
+            font-size: 1.25rem;
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 80%;
+            max-width: 300px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition-delay: 0.1s;
+        }
+        
+        .mobile-nav.active a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .mobile-nav a:nth-child(3) { transition-delay: 0.1s; }
+        .mobile-nav a:nth-child(4) { transition-delay: 0.2s; }
+        .mobile-nav a:nth-child(5) { transition-delay: 0.3s; }
+        .mobile-nav a:nth-child(6) { transition-delay: 0.4s; }
+        .mobile-nav a:nth-child(7) { transition-delay: 0.5s; }
+        .mobile-nav a:nth-child(8) { transition-delay: 0.6s; }
+        
+        .mobile-nav a:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .mobile-nav .logo-container {
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .mobile-nav.active .logo-container {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .mobile-nav .close-btn {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            opacity: 0;
+            transform: rotate(90deg);
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-nav.active .close-btn {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+        
+        /* Ensure mobile nav is above everything */
+        #mobile-nav {
+            z-index: 9999 !important;
+        }
+
+        nav a {
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        nav a:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 0.5rem;
+            z-index: -1;
+            transform: scale(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        nav a:hover::before {
+            transform: scale(1);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body class="body-loading">
+    <div id="loader" class="loader-overlay">
+        <div class="loader-logo">
+            <svg class="loader-svg-spinner arc-hidden" viewBox="0 0 100 100">
+                <circle class="spinner-arc" cx="50" cy="50" r="42" />
+            </svg>
+            <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" />
+        </div>
+    </div>
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 page-element delay-1 bg-primary-dark/90 backdrop-blur-md border-b border-blue-600/20">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <!-- Brand/Logo (visible on mobile) -->
+            <div class="flex items-center md:hidden">
+                <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center glow-effect overflow-hidden">
+                    <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" class="w-full h-full object-contain p-1">
+                </div>
+                <span class="text-white font-bold text-lg ml-2">BMUN'25</span>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex space-x-4 items-center justify-center flex-1">
+                <a href="/" class="text-blue-200">Home</a>
+                <a href="./information" class="text-blue-200">Information</a>
+                <a href="./councils" class="text-blue-200">Councils</a>
+                <div class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center glow-effect overflow-hidden mx-2">
+                    <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" class="w-full h-full object-contain p-1">
+                </div>
+                <a href="./register" class="text-blue-200">Register</a>
+                <a href="./contact" class="text-blue-200">Contact</a>
+                <a href="#" onclick="scrollToTop()" class="text-white bg-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-all transform hover:scale-105 glow-effect">Gallery</a>
+            </div>
+            
+            <!-- Mobile Navigation Toggle -->
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-btn" class="text-white focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Menu -->
+    <div id="mobile-nav" class="mobile-nav">
+        <button class="close-btn" onclick="toggleMobileNav()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="logo-container">
+            <div class="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center glow-effect overflow-hidden">
+                <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" class="w-full h-full object-contain p-1">
+            </div>
+        </div>
+        <a href="/" onclick="toggleMobileNav();">Home</a>
+        <a href="./information" onclick="toggleMobileNav();">Information</a>
+        <a href="./councils" onclick="toggleMobileNav();">Councils</a>
+        <a href="./register" onclick="toggleMobileNav();">Register</a>
+        <a href="./contact" onclick="toggleMobileNav();">Contact</a>
+        <a href="./gallery" onclick="toggleMobileNav();">Gallery</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-[40vh] flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-blue-900/70 z-0"></div>
+        <div class="absolute inset-0 bg-[url('./images/gallerybg.png')] bg-cover bg-center opacity-20 z-0"></div>
+        <div class="container mx-auto px-6 z-10 text-center" style="position:relative; z-index:1;">
+            <h1 class="text-6xl md:text-8xl font-extrabold mb-4 text-white mt-16 hover-away-text" style="font-family: 'Inter', sans-serif;">Gallery</h1>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-8">
+        <div class="container mx-auto px-6">
+            <div class="glass-card rounded-2xl p-8" style="background: rgba(30, 58, 138, 0.15); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37), inset 0 1px 0 rgba(255, 255, 255, 0.1);">
+                <h2 class="text-3xl font-bold mb-8 text-white">BMUN'24 Gallery</h2>
+                <p class="text-blue-200 mb-8 text-lg">Relive the moments from BMUN'24 and explore our comprehensive photo and video collections.</p>
+                <div class="gallery-grid">
+                    <!-- Gallery Item 1 -->
+                    <div class="gallery-item" onclick="window.open('https://drive.google.com/drive/folders/1z0J4JG0IlM7rvyjHLDGRn7Q6PEsO2Rx1?usp=drive_link', '_blank')" style="cursor: pointer;">
+                        <img src="./images/openingcery.JPG" alt="Opening Ceremony" class="rounded-lg">
+                        <div class="gallery-overlay">
+                            <h3 class="text-lg font-semibold text-white">Opening Ceremony</h3>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Item 2 -->
+                    <div class="gallery-item" onclick="window.open('https://drive.google.com/drive/folders/1_n8T5xyJl4ntiZYv3JpFPIl_ijvJPdov?usp=drive_link', '_blank')" style="cursor: pointer;">
+                        <img src="./images/day1.JPG" alt="Committee Session" class="rounded-lg">
+                        <div class="gallery-overlay">
+                            <h3 class="text-lg font-semibold text-white">Day 1</h3>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Item 3 -->
+                    <div class="gallery-item" onclick="window.open('https://drive.google.com/drive/folders/1cWiQ32BCRXjmF-4TUmwwroI_GFy0a4o-?usp=drive_link', '_blank')" style="cursor: pointer;">
+                        <img src="./images/day2.JPG" alt="Award Ceremony" class="rounded-lg">
+                        <div class="gallery-overlay">
+                            <h3 class="text-lg font-semibold text-white">Day 2</h3>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Item 4 -->
+                    <div class="gallery-item" onclick="window.open('https://drive.google.com/drive/folders/1AFP-rXG13Gzo94PAnayAnbmbmLCFseLk?usp=drive_link', '_blank')" style="cursor: pointer;">
+                        <img src="./images/closingcery.JPG" alt="Group Photo" class="rounded-lg">
+                        <div class="gallery-overlay">
+                            <h3 class="text-lg font-semibold text-white">Closing Ceremony</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 mt-12 page-element delay-6">
+        <div class="glass-card rounded-3xl p-8 mx-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Navigation Links -->
+                <div class="text-center md:text-left">
+                    <h3 class="text-xl font-semibold text-white mb-4">Navigation</h3>
+                    <div class="flex flex-col space-y-2">
+                        <a href="/" class="text-blue-300 hover:text-white transition-colors">Home</a>
+                        <a href="./information" class="text-blue-300 hover:text-white transition-colors">Information</a>
+                        <a href="./councils" class="text-blue-300 hover:text-white transition-colors">Councils</a>
+                        <a href="./register" class="text-blue-300 hover:text-white transition-colors">Register</a>
+                        <a href="./contact" class="text-blue-300 hover:text-white transition-colors">Contact</a>
+                        <a href="#" onclick="scrollToTop()" class="text-blue-300 hover:text-white transition-colors">Gallery</a>
+                    </div>
+                </div>
+                
+                <!-- Location -->
+                <div class="text-center md:text-left">
+                    <h3 class="text-xl font-semibold text-white mb-4">Location</h3>
+                    <div class="space-y-2">
+                        <p class="text-blue-300">Bahrain Indian School</p>
+                        <p class="text-blue-300">Building Number 109, Road 7307</p>
+                        <p class="text-blue-300">Block 473, Abu Saiba</p>
+                        <p class="text-blue-300">Kingdom of Bahrain</p>
+                    </div>
+                </div>
+                
+                <!-- Contact & Social -->
+                <div class="text-center md:text-left">
+                    <h3 class="text-xl font-semibold text-white mb-4">Contact Us</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-center md:justify-start">
+                            <i class="fas fa-envelope text-blue-400 mr-2"></i>
+                            <a href="mailto:contact@bmunbh.com" class="text-blue-300 hover:text-white transition-colors">contact@bmunbh.com</a>
+                        </div>
+                        <div class="flex items-center justify-center md:justify-start">
+                            <i class="fab fa-instagram text-blue-400 mr-2"></i>
+                            <a href="https://www.instagram.com/bmun.bis" class="text-blue-300 hover:text-white transition-colors">@bmun.bis</a>
+                        </div>
+                        <div class="flex items-center justify-center md:justify-start">
+                            <i class="fab fa-tiktok text-blue-400 mr-2"></i>
+                            <a href="https://www.tiktok.com/@bmunbis" class="text-blue-300 hover:text-white transition-colors" target="_blank">@bmunbis</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom section with logo and copyright -->
+            <div class="border-t border-blue-800 mt-8 pt-6 text-center">
+                <div class="flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center mb-2">
+                        <img src="./images/BMUN'25 Logo.png" alt="BMUN Logo" class="w-8 h-8 object-contain">
+                    </div>
+                    <span class="text-white font-bold text-xl">BMUN'25</span>
+                    <p class="text-blue-300 text-sm mt-2">Powered by Krissh Nambiar</p>
+                    <p class="text-blue-400 text-xs mt-2">© 2025 BMUN. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="main.js"></script>
+    <script>
+            // Smooth scroll to top function
+            function scrollToTop() {
+            const currentPosition = window.pageYOffset || document.documentElement.scrollTop;
+            const targetPosition = 0;
+            const distance = targetPosition - currentPosition;
+            const duration = 1000; // 1 second
+            let start = null;
+            
+            function animation(currentTime) {
+                if (start === null) start = currentTime;
+                const timeElapsed = currentTime - start;
+                const run = easeInOutCubic(timeElapsed, currentPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
+            }
+            
+            function easeInOutCubic(t, b, c, d) {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t * t + b;
+                t -= 2;
+                return c / 2 * (t * t * t + 2) + b;
+            }
+            
+            requestAnimationFrame(animation);
+        }
+        // Mobile Navigation Function
+        function toggleMobileNav() {
+            const mobileNav = document.getElementById('mobile-nav');
+            if (mobileNav) {
+                mobileNav.classList.toggle('active');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu button event listener
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', toggleMobileNav);
+            }
+
+            // Animation on load
+            // Make sure all elements are visible immediately
+            document.body.classList.remove('body-loading');
+            document.body.classList.add('page-loaded');
+            
+            // Ensure all sections are visible
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                section.style.opacity = '1';
+                section.style.transform = 'translateY(0)';
+            });
+
+            // Setup scroll animations
+            setupScrollAnimations();
+        });
+
+        // Scroll-triggered animations
+        function setupScrollAnimations() {
+            const animateElements = document.querySelectorAll('.animate-on-scroll');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Stagger child animations if present
+                        const children = entry.target.querySelectorAll(':scope > .animate-on-scroll');
+                        if (children.length > 0) {
+                            children.forEach((child, idx) => {
+                                setTimeout(() => {
+                                    child.classList.add('animate-visible');
+                                }, idx * 150);
+                            });
+                        }
+                        // Animate the section itself
+                        entry.target.classList.add('animate-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            });
+
+            animateElements.forEach(el => {
+                observer.observe(el);
+            });
+        }
+    </script>
+</body>
+</html>
